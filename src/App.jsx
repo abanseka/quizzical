@@ -2,86 +2,82 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { nanoid } from "nanoid"
 import url from "./config/config"
+
 import blob1 from "./assets/blobs.svg"
 import blob2 from "./assets/blobs (1).svg"
+
 import Button from "./components/Button"
+import Question from "./components/Question"
+import Option from "./components/Option"
+import mockdata from "./config/mockdata"
 
 function App() {
-	const [data, setData] = useState([])
 	const [showScore, setShowScore] = useState(true)
+	const [answers, setAnswers] = useState([])
+	const [questions, setQuestions] = useState([])
 
 	useEffect(() => {
 		;(async link => {
-			const req = await axios.get(link)
-			setData(req.data.results)
+			try {
+				const req = await axios.get(link)
+				setAnswers(
+					req.data.results.map(object => {
+						const newArr = []
+						const options = [...object.incorrect_answers]
+						options.splice(
+							Math.ceil(Math.random() * options.length),
+							0,
+							object.correct_answer
+						)
+						newArr.push(...options)
+						return newArr
+					})
+				)
+				setQuestions(req.data.results.map(object => [...object.question]))
+			} catch (err) {
+				throw new Error(err)
+			}
 		})(url)
 	}, [])
 
 	const toggleScore = () => setShowScore(!showScore)
-
-	const setScoreDisplayButton = (() => {
-		// prettier-ignore
-		return (
-			showScore 
-			? <Button label={"Check answers"} handleClick={toggleScore} />
-			: <p>
-					<span className="score">You scored 3/5 correct answers</span>
-					<Button label={"play again"} handleClick={toggleScore} />
-				</p>
+	const setScoreDisplayButton = () =>
+		showScore ? (
+			<Button label={"Check answers"} handleClick={toggleScore} />
+		) : (
+			<p>
+				<span className="score">You scored 3/5 correct answers</span>
+				<Button label={"play again"} handleClick={toggleScore} />
+			</p>
 		)
-	})()
 
-	// generate static page
-	const qandA = [
-		{
-			question: "How would one say goodbye in Spanish?",
-			answers: ["Adios", "Hola", "Au Revior", "Saturn"]
-		},
-		{
-			question: "What is the hottest plannet in our Solar system?",
-			answers: ["Mecury", "Venus", "Mars", "Salir"]
-		},
-		{
-			question: "How many hearts does an octopus have?",
-			answers: ["One", "Two", "Three", "Four"]
-		},
-		{
-			question:
-				"Which best selling toy of 1983 caused hysteria, resulting in riots breaking in stores?",
-			answers: ["Cabbage Patch kids", "Transformers", "Rubik's Cube", "Care Bears"]
-		},
-		{
-			question: "In which country was the caesar salad invented?",
-			answers: ["Italy", "Portugal", "Mexico", "France"]
-		}
-	]
-
-	// prettier-ignore
-	const generateQuestionAndAnswers = (() =>
-		qandA.map(qna => (
-			<section className="question-answer" key={nanoid()}>
-				<h3 className="question" key={nanoid()}>{qna.question}</h3>
-				<ul className="options">
-					{qna.answers.map(ans => (
-						<button
-							className="option"
-							key={nanoid()}
-							onClick={() => console.log("clicked")}
-						>
-							{ans}
-						</button>
-					))}
-				</ul>
-			</section>
-		)))()
+	const edit = e => {
+		e.currentTarget.style.backgroundColor = "#D6DBF5"
+		e.currentTarget.style.border = "none"
+	}
 
 	return (
 		<div className="frame">
 			<main className="app-container">
 				<img src={blob1} className="blob blob2" />
-				{generateQuestionAndAnswers}
+				{questions.map((qn, i) => (
+					<section className="question-answer" key={nanoid()}>
+						<>
+							<Question key={nanoid()} question={qn} />
+							<ul className="options" key={nanoid()}>
+								{answers[i].map(ans => (
+									<Option
+										key={nanoid()}
+										handleClick={e => edit(e)}
+										option={ans}
+									/>
+								))}
+							</ul>
+						</>
+					</section>
+				))}
 				<img src={blob2} className="blob blob1" />
-				<div className="results">{setScoreDisplayButton}</div>
+				<div className="results">{setScoreDisplayButton()}</div>
 			</main>
 		</div>
 	)
