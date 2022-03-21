@@ -1,0 +1,85 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: 0;
+}
+
+.frame {
+  font-family: karla, sans-serif;
+  color: #293264;
+  width: auto;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.frame .app-container {
+  width: 80%;
+  background-color: #F5F7FB;
+  position: relative;
+}
+.frame .blob {
+  position: absolute;
+  z-index: 1;
+}
+.frame .blob1 {
+  bottom: 0;
+  left: 0;
+  width: 10rem;
+}
+.frame .blob2 {
+  top: 0;
+  right: 0;
+  width: 15rem;
+}
+.frame .global-btn {
+  border: none;
+  border-radius: 1rem;
+  background-color: #4D5B9E;
+  color: #F5F7FB;
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
+  margin: 0rem 1rem;
+}
+.frame .results {
+  width: 80%;
+  margin: 1rem auto;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+.frame .score {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.frame .question-answer {
+  width: 90%;
+  margin: 0.5rem auto;
+  text-align: left;
+  border-bottom: 0.1rem #DBDEF0 solid;
+  position: relative;
+  z-index: 2;
+}
+.frame .question-answer .question {
+  font-size: 1rem;
+  margin-top: 2rem;
+}
+.frame .options {
+  width: 100%;
+  margin: 1rem auto;
+}
+.frame .option {
+  font-size: 0.8rem;
+  background: none;
+  margin: 0.5rem 1rem 0.5rem 0rem;
+  padding: 0.3rem 1.2rem;
+  border-radius: 0.8rem;
+  border: #4D5B9E 0.1rem solid;
+}
+.frame .option:focus {
+  background-color: #D6DBF5;
+  border: none;
+}
+.frame button:active {
+  transform: scale(0.9);
+}
