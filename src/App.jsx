@@ -47,6 +47,8 @@ function App() {
 		})
 	}
 
+	const parse = new DOMParser()
+
 	const generateQnA = (questions, options, reference) =>
 		questions.map((qn, qnID) => (
 			<section className="question-answer" key={nanoid()}>
@@ -56,7 +58,9 @@ function App() {
 						{options[qnID].map((ans, ansID) => (
 							<Option
 								key={nanoid()}
-								option={ans.option}
+								option={
+									parse.parseFromString(ans.option, "text/html").body.textContent
+								}
 								ID={ansID}
 								handleClick={e => checkAnswer(e, ans, reference)}
 							/>

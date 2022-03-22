@@ -7,7 +7,12 @@ const setStateForAnswers = data =>
 		return newArr
 	})
 
-const setStateForQuestions = data => [...data.map(object => object.question)]
+const setStateForQuestions = data => [
+	...data.map(object => {
+		const parse = new DOMParser()
+		return parse.parseFromString(object.question, "text/html").body.textContent
+	})
+]
 
 const generateAnswers = answer => ({
 	isClicked: true,
