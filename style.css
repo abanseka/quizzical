@@ -76,10 +76,6 @@
   border-radius: 0.8rem;
   border: #4D5B9E 0.1rem solid;
 }
-.frame .option:focus {
-  background-color: #D6DBF5;
-  border: none;
-}
 .frame button:active {
   transform: scale(0.9);
 }
