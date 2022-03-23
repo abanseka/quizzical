@@ -6,14 +6,14 @@ import blob1 from "./assets/blobs.svg"
 import blob2 from "./assets/blobs (1).svg"
 
 import helpers from "./components/helpers"
-import IntroPage from "./components/IntroPage"
+import IntroductionPage from "./components/IntroPage"
 import Quizz from "./components/Quizz"
 import Button from "./components/Button"
 
 function App() {
-	const [start, setStart] = useState(false)
-	const [render, setRender] = useState(true)
-	const [data, setData] = useState([])
+	const [startQuizz, setStartQuizz] = useState(false)
+	const [renderQuizz, setRenderQuizz] = useState(true)
+	const [QuizzData, setQuizzData] = useState([])
 	const [answers, setAnswers] = useState([])
 	const [questions, setQuestions] = useState([])
 	const [score, setScore] = useState(0)
@@ -27,56 +27,55 @@ function App() {
 				const data = req.data.results
 				setAnswers(helpers.setStateForAnswers(data))
 				setQuestions(helpers.setStateForQuestions(data))
-				setData(data)
+				setQuizzData(data)
 			} catch (err) {
 				throw new Error(err)
 			}
 		}
 		fetchData(url)
-	}, [render])
+	}, [renderQuizz])
 
 	allOptions = [...helpers.generateStateForOptions(answers)]
 
-	const toggleButton = () => {
+	const switchButtons = () => {
 		setShowResults(!showResults)
-		showResults && playAgain()
+		showResults && resetQuizz()
 	}
 
-	const playAgain = () => {
+	const resetQuizz = () => {
 		setScore(0)
-		setStart(!start)
-		setRender(!render)
+		setStartQuizz(!startQuizz)
+		setRenderQuizz(!renderQuizz)
 	}
 
+	const monitorScore = (() => score <= questions.length)()
 	return (
 		<div className="frame">
 			<main className="app-container">
 				<img src={blob1} className="blob blob2" />
-				{start ? (
+				{startQuizz ? (
 					<Quizz
 						questions={questions}
 						options={allOptions}
-						reference={data}
+						reference={QuizzData}
 						setScore={setScore}
 					/>
 				) : (
-					<IntroPage setStart={() => setStart(!start)} />
+					<IntroductionPage setStart={() => setStartQuizz(!startQuizz)} />
 				)}
 				<img src={blob2} className="blob blob1" />
 				<div className="results">
 					<p>
 						{showResults && (
 							<span className="score">
-								{score <= 5 && "You scored "}
-								{score}/{questions.length} {score <= 5 && "correct answers"}
+								{monitorScore && "You scored "}
+								{score}/{questions.length} {monitorScore && "correct answers"}
 							</span>
 						)}
-						{!start ? (
-							""
-						) : (
+						{startQuizz && (
 							<Button
 								label={showResults ? "Play 🔮 again" : "Check 🔭 Answer"}
-								handleClick={toggleButton}
+								handleClick={switchButtons}
 							/>
 						)}
 					</p>
