@@ -35,11 +35,17 @@ function App() {
 		fetchData(url)
 	}, [renderQuizz])
 
+	// * Make this A State
 	allOptions = [...helpers.generateStateForOptions(answers)]
 
 	const switchButtons = () => {
 		setShowResults(!showResults)
 		showResults && resetQuizz()
+		// TODO : Make all options gray when check answer is clicked
+		if (!showResults) {
+			const options = document.getElementsByClassName("option")
+			console.log(options)
+		}
 	}
 
 	const resetQuizz = () => {
