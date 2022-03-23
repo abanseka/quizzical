@@ -15,6 +15,9 @@
 }
 .frame .app-container {
   width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background-color: #F5F7FB;
   position: relative;
 }
@@ -41,6 +44,9 @@
   font-size: 1rem;
   margin: 0rem 1rem;
 }
+.frame .global-btn:hover {
+  cursor: pointer;
+}
 .frame .results {
   width: 80%;
   margin: 1rem auto;
@@ -51,6 +57,32 @@
 .frame .score {
   font-size: 1rem;
   font-weight: bold;
+}
+.frame .intro-page {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+.frame .intro-content {
+  width: 70%;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+}
+.frame .intro-heading {
+  font-size: 3rem;
+  margin: 1rem auto;
+}
+.frame .intro-description {
+  font-size: 1.2rem;
+  margin: 1rem auto;
 }
 .frame .question-answer {
   width: 90%;
@@ -75,6 +107,9 @@
   padding: 0.3rem 1.2rem;
   border-radius: 0.8rem;
   border: #4D5B9E 0.1rem solid;
+}
+.frame .option:hover {
+  cursor: pointer;
 }
 .frame button:active {
   transform: scale(0.9);
