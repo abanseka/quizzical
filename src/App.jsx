@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import url from "./config/config"
-import { nanoid } from "nanoid"
 
 import blob1 from "./assets/blobs.svg"
 import blob2 from "./assets/blobs (1).svg"
 
 import helpers from "./components/helpers"
-import Question from "./components/Question"
-import Option from "./components/Option"
+import IntroPage from "./components/IntroPage"
+import Quizz from "./components/Quizz"
 import Button from "./components/Button"
 
 function App() {
+	const [start, setStart] = useState(false)
+	const [render, setRender] = useState(true)
 	const [data, setData] = useState([])
 	const [answers, setAnswers] = useState([])
 	const [questions, setQuestions] = useState([])
@@ -22,7 +23,6 @@ function App() {
 	useEffect(() => {
 		const fetchData = async link => {
 			try {
-				// debugger
 				const req = await axios.get(link)
 				const data = req.data.results
 				setAnswers(helpers.setStateForAnswers(data))
@@ -33,62 +33,52 @@ function App() {
 			}
 		}
 		fetchData(url)
-	}, [])
+	}, [render])
 
 	allOptions = [...helpers.generateStateForOptions(answers)]
 
-	const checkAnswer = (event, ans, reference) => {
-		const option = event.target
-		option.style.backgroundColor = ans.isClicked ? "#D6DBF5" : "none"
-		option.style.border = ans.isClicked && "none"
-
-		reference.forEach(ref => {
-			ans.option === ref.correct_answer && setScore(score + 1)
-		})
+	const toggleButton = () => {
+		setShowResults(!showResults)
+		showResults && playAgain()
 	}
 
-	const parse = new DOMParser()
-
-	const generateQnA = (questions, options, reference) =>
-		questions.map((qn, qnID) => (
-			<section className="question-answer" key={nanoid()}>
-				<>
-					<Question key={nanoid()} question={qn} />
-					<ul className="options" key={nanoid()}>
-						{options[qnID].map((ans, ansID) => (
-							<Option
-								key={nanoid()}
-								option={
-									parse.parseFromString(ans.option, "text/html").body.textContent
-								}
-								ID={ansID}
-								handleClick={e => checkAnswer(e, ans, reference)}
-							/>
-						))}
-					</ul>
-				</>
-			</section>
-		))
-
-	const toggleButton = () => setShowResults(!showResults)
+	const playAgain = () => {
+		setScore(0)
+		setStart(!start)
+		setRender(!render)
+	}
 
 	return (
 		<div className="frame">
 			<main className="app-container">
 				<img src={blob1} className="blob blob2" />
-				{generateQnA(questions, allOptions, data, setScore)}
+				{start ? (
+					<Quizz
+						questions={questions}
+						options={allOptions}
+						reference={data}
+						setScore={setScore}
+					/>
+				) : (
+					<IntroPage setStart={() => setStart(!start)} />
+				)}
 				<img src={blob2} className="blob blob1" />
 				<div className="results">
 					<p>
 						{showResults && (
 							<span className="score">
-								You scored {score}/{questions.length} correct answers
+								{score <= 5 && "You scored "}
+								{score}/{questions.length} {score <= 5 && "correct answers"}
 							</span>
 						)}
-						<Button
-							label={showResults ? "Play again" : "Check Answer"}
-							handleClick={toggleButton}
-						/>
+						{!start ? (
+							""
+						) : (
+							<Button
+								label={showResults ? "Play 🔮 again" : "Check 🔭 Answer"}
+								handleClick={toggleButton}
+							/>
+						)}
 					</p>
 				</div>
 			</main>
