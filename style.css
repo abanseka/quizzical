@@ -100,7 +100,7 @@
   width: 100%;
   margin: 1rem auto;
 }
-.frame .option {
+.frame .active-option {
   font-size: 0.8rem;
   background: none;
   margin: 0.5rem 1rem 0.5rem 0rem;
@@ -108,9 +108,25 @@
   border-radius: 0.8rem;
   border: #4D5B9E 0.1rem solid;
 }
-.frame .option:hover {
+.frame .inactive-option {
+  border: #4d5b9e83 0.1rem solid;
+  color: #2932644d;
+}
+.frame .choosen-option {
+  background-color: #D6DBF5;
+  border: none;
+}
+.frame .correct-option {
+  background-color: #94D7A2;
+  border: none;
+}
+.frame .wrong-option {
+  background-color: #F8BCBC;
+  border: none;
+}
+.frame:hover {
   cursor: pointer;
 }
 .frame button:active {
-  transform: scale(0.9);
+  transform: scale(0.98);
 }

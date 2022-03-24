@@ -16,7 +16,6 @@ const setStateForQuestions = data => [
 
 const generateAnswers = answer => ({
 	isClicked: true,
-	id: Math.ceil(Math.random() * 1000),
 	option: answer
 })
 

@@ -2,20 +2,16 @@ import Question from "./Question"
 import Option from "./Option"
 import { nanoid } from "nanoid"
 
-const Quizz = ({ questions, options, reference, setScore }) => {
+const Quizz = ({ questions, options, optionIsActive, reference, setScore }) => {
 	const parse = new DOMParser()
 
-	const checkAnswer = (event, ans, reference, setScore) => {
-		const option = event.target
-		option.style.backgroundColor = ans.isClicked ? "#D6DBF5" : "none"
-		option.style.border = ans.isClicked && "none"
+	const choosen = e => e.target.classList.toggle("choosen-option")
 
-		reference.forEach(ref => {
-			ans.option === ref.correct_answer &&
-				setScore(
-					score => (score < 5 && score + 1) || (score === 5 && `Geez!... 😄 ${score}`)
-				)
-		})
+	const checkanswer = (e, ans, answersList) => {
+		choosen(e)
+		for (let answer of answersList) {
+			ans.isClicked && ans.option === answer.correct_answer && console.log("correct")
+		}
 	}
 
 	return questions.map((qn, qnID) => (
@@ -26,9 +22,10 @@ const Quizz = ({ questions, options, reference, setScore }) => {
 					{options[qnID].map((ans, ansID) => (
 						<Option
 							key={nanoid()}
-							option={parse.parseFromString(ans.option, "text/html").body.textContent}
 							ID={ansID}
-							handleClick={e => checkAnswer(e, ans, reference, setScore)}
+							active={optionIsActive}
+							handleClick={e => checkanswer(e, ans, reference)}
+							option={parse.parseFromString(ans.option, "text/html").body.textContent}
 						/>
 					))}
 				</ul>
