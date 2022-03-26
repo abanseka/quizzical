@@ -2,32 +2,41 @@ import Question from "./Question"
 import Option from "./Option"
 import { nanoid } from "nanoid"
 
-const Quizz = ({ questions, options, optionIsActive, reference, setScore }) => {
+// prettier-ignore
+const Quizz = ({ 
+	questions, 
+	options, 
+	reference,
+	setScore, 
+	setAllOptions 
+}) => {
 	const parse = new DOMParser()
 
-	const choosen = e => e.target.classList.toggle("choosen-option")
+	const checkanswer = (ans, reference) => {
 
-	const checkanswer = (e, ans, answersList) => {
-		choosen(e)
-		for (let answer of answersList) {
-			ans.isClicked && ans.option === answer.correct_answer && console.log("correct")
+		for (let ref of reference){
+			ans.option === ref.correct_answer &&  setScore(score => score + 1)
 		}
 	}
+
+	const printOptions = (id) =>
+		options[id].map(ans => (
+			<Option
+				key={nanoid()}
+				id ={ans.id}
+				isactive={ans.isActive}
+				isclicked={ans.isclicked}
+				handleClick={()=> checkanswer(ans, reference,)}
+				option={parse.parseFromString(ans.option, "text/html").body.textContent}
+			/>
+		))
 
 	return questions.map((qn, qnID) => (
 		<section className="question-answer" key={nanoid()}>
 			<>
 				<Question key={nanoid()} question={qn} />
 				<ul className="options" key={nanoid()}>
-					{options[qnID].map((ans, ansID) => (
-						<Option
-							key={nanoid()}
-							ID={ansID}
-							active={optionIsActive}
-							handleClick={e => checkanswer(e, ans, reference)}
-							option={parse.parseFromString(ans.option, "text/html").body.textContent}
-						/>
-					))}
+				{printOptions(qnID)}
 				</ul>
 			</>
 		</section>
@@ -35,3 +44,11 @@ const Quizz = ({ questions, options, optionIsActive, reference, setScore }) => {
 }
 
 export default Quizz
+
+// Todo : create 5 classnames and render conditionally
+// correct ?
+// clicked ?
+// wrong?
+// active?
+// inactive?
+// * use classnames npm package

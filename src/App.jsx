@@ -14,21 +14,21 @@ function App() {
 	const [startQuizz, setStartQuizz] = useState(false)
 	const [renderQuizz, setRenderQuizz] = useState(true)
 	const [QuizzData, setQuizzData] = useState([])
-	const [answers, setAnswers] = useState([])
 	const [questions, setQuestions] = useState([])
 	const [score, setScore] = useState(0)
 	const [showResults, setShowResults] = useState(false)
-	const [optionActive, setOptionActive] = useState(true)
-	let allOptions
+	const [allOptions, setAllOptions] = useState([])
 
 	useEffect(() => {
 		const fetchData = async link => {
 			try {
 				const req = await axios.get(link)
 				const data = req.data.results
-				setAnswers(helpers.setStateForAnswers(data))
 				setQuestions(helpers.setStateForQuestions(data))
 				setQuizzData(data)
+
+				const answers = helpers.setStateForAnswers(data)
+				setAllOptions([...helpers.generateStateForOptions(answers)])
 			} catch (err) {
 				throw new Error(err)
 			}
@@ -36,20 +36,17 @@ function App() {
 		fetchData(url)
 	}, [renderQuizz])
 
-	allOptions = [...helpers.generateStateForOptions(answers)]
-
-	const switchButtons = () => {
+	const togglePages = () => {
 		setShowResults(!showResults)
 		showResults && resetQuizz()
-		!showResults && setOptionActive(!optionActive)
 	}
 
 	const resetQuizz = () => {
 		setScore(0)
 		setStartQuizz(!startQuizz)
 		setRenderQuizz(!renderQuizz)
-		setOptionActive(!optionActive)
 	}
+	console.log(allOptions)
 
 	const monitorScore = (() => score <= questions.length)()
 
@@ -66,7 +63,7 @@ function App() {
 								options={allOptions}
 								reference={QuizzData}
 								setScore={setScore}
-								optionIsActive={optionActive}
+								setAllOptions={setAllOptions}
 							/>
 					:	<IntroductionPage setStart={() => setStartQuizz(!startQuizz)} />
 				}
@@ -75,15 +72,15 @@ function App() {
 					<p>{
 							showResults && (
 									<span className="score">
-										{monitorScore && "You scored "}
-										{score}/{questions.length} {monitorScore && "correct answers"}
+										{monitorScore ? `You scored 	${score}/${questions.length} correct answers` : "Oh common, really?"}
+									
 									</span>
 								)}
 						{
 						startQuizz && (
 							<Button
 								label={showResults ? "Play 🔮 again" : "Check 🔭 Answer"}
-								handleClick={switchButtons}
+								handleClick={togglePages}
 							/>
 						)}
 					</p>

@@ -1,13 +1,16 @@
 import classNames from "classnames"
 
 export default function Option(props) {
-	const optionClass = classNames({
-		"active-option": props.active,
-		"active-option inactive-option": !props.active
+	const conditionalStyles = classNames("active-option", {
+		"choosen-option": props.isClicked
 	})
-
 	return (
-		<button className={optionClass} onMouseDown={props.handleClick}>
+		//prettier-ignore
+		<button 
+		className={conditionalStyles}
+		onMouseDown={props.handleClick} 
+		id={props.id}
+		>
 			{props.option}
 		</button>
 	)
