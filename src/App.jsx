@@ -49,7 +49,7 @@ function App() {
 					.map(ans => ans.option)
 
 				return options.map(ans => {
-					if (clickedOptions.includes(ans.option)) {
+					if (clickedOptions.includes(ans.option) && !answer.includes(ans.option)) {
 						return { ...ans, isWrong: !ans.isWrong }
 					} else {
 						ans

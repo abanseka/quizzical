@@ -114,15 +114,12 @@
 }
 .frame .choosen-option {
   background-color: #D6DBF5;
-  border: none;
 }
 .frame .correct-option {
   background-color: #94D7A2;
-  border: none;
 }
 .frame .wrong-option {
   background-color: #F8BCBC;
-  border: none;
 }
 .frame:hover {
   cursor: pointer;
