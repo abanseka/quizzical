@@ -22,7 +22,7 @@ const generateOptions = answer => ({
 	isActive: true,
 	isCorrect: false,
 	isWrong: false,
-	isUnActive: false,
+	isInActive: false,
 	option: answer,
 	id: nanoid()
 })

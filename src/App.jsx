@@ -36,9 +36,30 @@ function App() {
 		fetchData(url)
 	}, [renderQuizz])
 
-	const togglePages = () => {
+	const togglePages = answers => {
 		setShowResults(!showResults)
 		showResults && resetQuizz()
+
+		const answer = answers.map(ans => ans.correct_answer)
+
+		setAllOptions(prevOption =>
+			prevOption.map(options => {
+				const clickedOptions = options
+					.filter(optn => !optn.isClicked)
+					.map(ans => ans.option)
+
+				return options.map(ans => {
+					if (clickedOptions.includes(ans.option)) {
+						return { ...ans, isWrong: !ans.isWrong }
+					} else {
+						ans
+					}
+					return answer.includes(ans.option)
+						? { ...ans, isCorrect: !ans.isCorrect }
+						: { ...ans, isInactive: !ans.isInactive }
+				})
+			})
+		)
 	}
 
 	const resetQuizz = () => {
@@ -46,7 +67,6 @@ function App() {
 		setStartQuizz(!startQuizz)
 		setRenderQuizz(!renderQuizz)
 	}
-	console.log(allOptions)
 
 	const monitorScore = (() => score <= questions.length)()
 
@@ -80,7 +100,7 @@ function App() {
 						startQuizz && (
 							<Button
 								label={showResults ? "Play 🔮 again" : "Check 🔭 Answer"}
-								handleClick={togglePages}
+								handleClick={()=>togglePages(QuizzData)}
 							/>
 						)}
 					</p>
