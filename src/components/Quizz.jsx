@@ -2,12 +2,22 @@ import Question from "./Question"
 import Option from "./Option"
 import { nanoid } from "nanoid"
 
-const Quizz = ({ questions, options, reference, setScore, setAllOptions }) => {
+// prettier-ignore
+const Quizz = ({ 
+	questions, 
+	options, 
+	reference, 
+	setScore, 
+	setAllOptions
+}) => {
 	const parse = new DOMParser()
 
 	const checkanswer = (id, optn, answers) => {
 		const correct_answers = answers.map(ans => ans.correct_answer)
-		correct_answers.includes(optn.option) && setScore(score => score + 1)
+
+		correct_answers.includes(optn.option) 
+			&& setScore(score => score + 1)
+
 		setAllOptions(prevOption =>
 			prevOption.map(options =>
 				options.map(ans => {
